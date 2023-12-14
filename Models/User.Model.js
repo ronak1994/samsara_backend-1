@@ -73,6 +73,15 @@ const userSchema = new mongoose.Schema({
         
         
     },
+    attendance: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Class' }],
+    achievements: [String],
+    assessments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Assessment' }],
+    classFeedback: [
+        {
+          classId: { type: mongoose.Schema.Types.ObjectId, ref: 'Class' },
+          formData: { type: mongoose.Schema.Types.Mixed },
+        },
+      ],
     passwordChangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date,

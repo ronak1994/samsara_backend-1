@@ -127,3 +127,108 @@ export const deleteUser = async (req, res) => {
         });
     }
 };
+
+export const markAttendance = async (req, res) => {
+    const { userId, classId } = req.params;
+  
+    try {
+      const user = await User.findByIdAndUpdate(
+        userId,
+        { $push: { attendance: classId } },
+        { new: true }
+      );
+  
+      res.status(200).json({
+        status: 'success',
+        data: {
+          user,
+        },
+      });
+    } catch (error) {
+      res.status(500).json({
+        status: 'fail',
+        message: error.message,
+      });
+    }
+  };
+
+export const addAchievement = async (req, res) => {
+    const { userId } = req.params;
+    const { achievement } = req.body;
+  
+    try {
+      const user = await User.findByIdAndUpdate(
+        userId,
+        { $push: { achievements: achievement } },
+        { new: true }
+      );
+  
+      res.status(200).json({
+        status: 'success',
+        data: {
+          user,
+        },
+      });
+    } catch (error) {
+      res.status(500).json({
+        status: 'fail',
+        message: error.message,
+      });
+    }
+  };
+
+  export const addAssessment = async (req, res) => {
+    const { userId } = req.params;
+    const { assessmentId } = req.body;
+  
+    try {
+      const user = await User.findByIdAndUpdate(
+        userId,
+        { $push: { assessments: assessmentId } },
+        { new: true }
+      );
+  
+      res.status(200).json({
+        status: 'success',
+        data: {
+          user,
+        },
+      });
+    } catch (error) {
+      res.status(500).json({
+        status: 'fail',
+        message: error.message,
+      });
+    }
+  };
+
+  export const submitAssessmentForm = async (req, res) => {
+    const { userId, classId, formData } = req.body;
+  
+    try {
+      const user = await User.findByIdAndUpdate(
+        userId,
+        {
+          $push: {
+            classFeedback: {
+              classId,
+              formData,
+            },
+          },
+        },
+        { new: true }
+      );
+  
+      res.status(200).json({
+        status: 'success',
+        data: {
+          user,
+        },
+      });
+    } catch (error) {
+      res.status(500).json({
+        status: 'fail',
+        message: error.message,
+      });
+    }
+  };

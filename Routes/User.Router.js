@@ -6,7 +6,11 @@ import {
     getUserById,
     updateUser,
     deleteUser,
-    loginUser
+    loginUser,
+    markAttendance,
+    addAchievement,
+    addAssessment,
+    submitAssessmentForm
 } from '../Controllers/User.Controller.js';
 
 
@@ -27,5 +31,15 @@ userRouter.patch('/:id', updateUser);
 
 // Delete a user by ID
 userRouter.delete('/:id', deleteUser);
+
+userRouter.put('/:userId/mark-attendance/:classId', markAttendance);
+
+// Achievements routes
+userRouter.put('/:userId/add-achievement', addAchievement);
+
+// Assessments routes
+userRouter.put('/:userId/add-assessment', addAssessment);
+
+userRouter.post('/:userId/submit-assessment-form', submitAssessmentForm);
 
 export default userRouter;

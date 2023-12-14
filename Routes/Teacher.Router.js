@@ -7,7 +7,8 @@ import {
   deleteTeacher,
   loginTeacher
 } from '../Controllers/Teacher.Controller.js';
-
+import multer from 'multer';
+import { uploadClassRecording } from '../Controllers/Classes.Controller.js';
 
 const teacherRouter = express.Router();
 
@@ -28,5 +29,19 @@ teacherRouter.delete('/:id', deleteTeacher);
 
 // Login
 teacherRouter.post('/login', loginTeacher);
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/'); // Adjust the destination folder as needed
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({ storage: storage });
+
+teacherRouter.post('/upload-recording', upload.single('recording'), uploadClassRecording);
+
 
 export default teacherRouter;

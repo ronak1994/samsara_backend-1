@@ -70,6 +70,8 @@ const teacherSchema = new mongoose.Schema({
     passwordChangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date,
+    attendance: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Class' }],
+    achievements: [String],
     status: {
         type: Boolean,
         default: true,
