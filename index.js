@@ -21,6 +21,12 @@ import { Teacher } from './Models/Teachers.Model.js';
 import { createUser, loginUser, uploadImages } from './Controllers/User.Controller.js';
 import { createTeacher, loginTeacher } from './Controllers/Teacher.Controller.js';
 import multer from 'multer';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const app = express()
 const port = process.env.PORT || 4000
 
