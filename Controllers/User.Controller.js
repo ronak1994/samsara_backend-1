@@ -40,7 +40,19 @@ export const loginUser = async (req, res) => {
 // Create a new user
 export const createUser = async (req, res) => {
     try {
-        const newUser = await User.create(req.body);
+      // console.log("images",req.file)
+      const userData = req.body;
+
+      const images = req.files;
+      //  console.log("Images",images)
+       
+        userData.images = images.map(file => ({
+            filename: file.filename,
+            path: file.path
+        }));
+      
+
+        const newUser = await User.create(userData);
         res.status(201).json({
             status: 'success',
             data: {
@@ -232,3 +244,29 @@ export const addAchievement = async (req, res) => {
       });
     }
   };
+
+  export const uploadImages =  async (req, res) => {
+    try {
+        // Assuming you have the user ID available in req.user._id
+        const userId = req.user._id;
+
+        // Update the user document with the uploaded image details
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            {
+                $push: {
+                    images: {
+                        filename: req.file.filename,
+                        path: req.file.path
+                    }
+                }
+            },
+            { new: true } // Return the updated user document
+        );
+
+        res.json(updatedUser);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}

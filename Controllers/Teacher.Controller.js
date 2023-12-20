@@ -39,7 +39,18 @@ export const loginTeacher = async (req, res) => {
 // Create a new teacher
 export const createTeacher = async (req, res) => {
   try {
-    const newTeacher = await Teacher.create(req.body);
+    const teacherData = req.body;
+    const qualificationData = req.body.qualification;
+    
+      const images = req.files;
+      const qualificationArray = JSON.parse(qualificationData);
+       
+      teacherData.images = images.map(file => ({
+            filename: file.filename,
+            path: file.path
+        }));
+        teacherData.qualification = qualificationArray;
+    const newTeacher = await Teacher.create(teacherData);
     res.status(201).json({
       status: 'success',
       data: {

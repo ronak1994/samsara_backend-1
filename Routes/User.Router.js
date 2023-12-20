@@ -10,14 +10,28 @@ import {
     markAttendance,
     addAchievement,
     addAssessment,
-    submitAssessmentForm
+    submitAssessmentForm,
+    uploadImages
 } from '../Controllers/User.Controller.js';
-
+import multer from 'multer';
 
 const userRouter = express.Router();
 
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'media/'); // Specify the path to your media folder
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const extension = path.extname(file.originalname);
+        cb(null, file.fieldname + '-' + uniqueSuffix + extension);
+    }
+});
+
+const upload = multer({ storage: storage });
 // Create a new user
-userRouter.post('/', createUser);
+userRouter.post('/',upload.array('images', 5), createUser);
 
 userRouter.post('/login', loginUser);
 // Get all users
@@ -41,5 +55,8 @@ userRouter.put('/:userId/add-achievement', addAchievement);
 userRouter.put('/:userId/add-assessment', addAssessment);
 
 userRouter.post('/:userId/submit-assessment-form', submitAssessmentForm);
+
+
+userRouter.post('/upload_images', upload.single('image'),uploadImages)
 
 export default userRouter;

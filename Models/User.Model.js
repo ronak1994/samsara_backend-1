@@ -9,6 +9,9 @@ const userSchema = new mongoose.Schema({
         required: [true, 'A user must have a name'],
         maxlength: [20, 'Username must be less than or equal to 10 characters.']
     },
+    gender: {
+        type: String
+    },
     company_name: {
         type: String,
     },
@@ -23,8 +26,8 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: [true, 'Please provide a password'],
-        minlength: 8
+        // required: [false, 'Please provide a password'],
+        // minlength: 8
     },
     mobile: {
         type: String,
@@ -36,9 +39,9 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Please provide  data of birth'],
         
     },
-    image: {
+    Address:{
         type: String,
-        default: 'default_image.jpg'
+        required: [true, 'Please provide  address'],
     },
     city: {
         type: String,
@@ -65,8 +68,14 @@ const userSchema = new mongoose.Schema({
         required: [true, 'user weight is required'],
         
     },
-    health_issues:{
-       type:Object
+    health_issues:[String],
+    howyouknowus:{
+     type:String,
+     required: [true, 'howyouknowus is required'],
+    },
+    PriorExperience:{
+        type:String,
+        required: [true, 'PriorExperience is required'],
     },
     description: {
         type: String,
@@ -92,7 +101,11 @@ const userSchema = new mongoose.Schema({
     active: {
         type: Boolean,
         default: false,
-    }
+    },
+    images: [{
+        filename: String, // Store the filename of the image
+        path: String,     // Store the path to the image in the media folder
+    }],
 },
     {
         timestamps: {

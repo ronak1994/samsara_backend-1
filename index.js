@@ -18,7 +18,7 @@ import assessmentRouter from './Routes/Assessment.Router.js';
 import adminRouter from './Routes/Admin.Router.js';
 import { User } from './Models/User.Model.js';
 import { Teacher } from './Models/Teachers.Model.js';
-import { createUser, loginUser } from './Controllers/User.Controller.js';
+import { createUser, loginUser, uploadImages } from './Controllers/User.Controller.js';
 import { createTeacher, loginTeacher } from './Controllers/Teacher.Controller.js';
 import multer from 'multer';
 const app = express()
@@ -32,13 +32,36 @@ app.get('/', (req, res) => {
       message: "Server is running ...."
     })
   })
-
-
-
+  // app.use((err, req, res, next) => {
+  //   if (err instanceof multer.MulterError) {
+  //     // A Multer error occurred when uploading.
+  //     res.status(400).json({
+  //       status: 'fail',
+  //       message: err.message,
+  //     });
+  //   } else if (err) {
+  //     // An unknown error occurred.
+  //     res.status(500).json({
+  //       status: 'error',
+  //       message: err.message,
+  //     });
+  //   } else {
+  //     next();
+  //   }
+  // });
+  const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'media/'); // Set the destination folder for image storage
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.originalname); // Use the original filename for the stored image
+    },
+  });
+  const upload = multer({ storage: storage });
 app.post('/student_login',loginUser)
-app.post('/student_signup',createUser)
+app.post('/student_signup',upload.array('images', 2),createUser)
 app.post('/teacher_login',loginTeacher)
-app.post('/teacher_signup',createTeacher)
+app.post('/teacher_signup',upload.array('images', 2),createTeacher)
 app.use('/admin',adminRouter)
 
 // JWT Middleware
@@ -63,6 +86,7 @@ app.use('/admin',adminRouter)
 
 
 // Add the middleware to secure your routes
+
 // app.use('/api', requireToken);
 
 

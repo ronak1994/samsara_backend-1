@@ -17,8 +17,8 @@ const teacherSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: [true, 'Please provide a password'],
-        minlength: 8
+        // required: [true, 'Please provide a password'],
+        // minlength: 8
     },
     mobile: {
         type: String,
@@ -30,10 +30,15 @@ const teacherSchema = new mongoose.Schema({
         required: [true, 'Please provide  data of birth'],
         
     },
-    image: {
+    images: [{
+        filename: String, // Store the filename of the image
+        path: String,     // Store the path to the image in the media folder
+    }],
+    Address:{
         type: String,
-        default: 'default_image.jpg'
+        required: [true, 'Please provide  address'],
     },
+    expertise:[String],
     city: {
         type: String,
         required: [true, 'A user must have a city'],
@@ -49,19 +54,7 @@ const teacherSchema = new mongoose.Schema({
         required: [true, 'A user must have a country'],
         
     },
-    height: {
-        type: String,
-        required: [true, 'user height is required'],
-        
-    },
-    weight: {
-        type: String,
-        required: [true, 'user weight is required'],
-        
-    },
-    qualification:{
-       type:Array
-    },
+    qualification:[Object],
     description: {
         type: String,
         
