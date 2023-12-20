@@ -21,12 +21,12 @@ import { Teacher } from './Models/Teachers.Model.js';
 import { createUser, loginUser, uploadImages } from './Controllers/User.Controller.js';
 import { createTeacher, loginTeacher } from './Controllers/Teacher.Controller.js';
 import multer from 'multer';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+// import path from 'path';
+// import { fileURLToPath } from 'url';
+// import { dirname } from 'path';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = dirname(__filename);
 const app = express()
 const port = process.env.PORT || 4000
 
@@ -64,7 +64,7 @@ app.get('/', (req, res) => {
     },
   });
   const upload = multer({ storage: storage });
-  app.use('/media', express.static(path.join(__dirname, 'media')));
+  // app.use('/media', express.static(path.join(__dirname, 'media')));
 app.post('/student_login',loginUser)
 app.post('/student_signup',upload.array('images', 2),createUser)
 app.post('/teacher_login',loginTeacher)
