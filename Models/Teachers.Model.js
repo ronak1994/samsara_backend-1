@@ -55,6 +55,7 @@ const teacherSchema = new mongoose.Schema({
         
     },
     qualification:[Object],
+    additional_courses:[Object],
     description: {
         type: String,
         

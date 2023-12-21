@@ -66,7 +66,7 @@ app.get('/', (req, res) => {
   const upload = multer({ storage: storage });
   // app.use('/media', express.static(path.join(__dirname, 'media')));
 app.post('/student_login',loginUser)
-app.post('/student_signup',upload.array('images', 2),createUser)
+app.post('/student_signup',upload.array('images', 1),createUser)
 app.post('/teacher_login',loginTeacher)
 app.post('/teacher_signup',upload.array('images', 2),createTeacher)
 app.use('/admin',adminRouter)
