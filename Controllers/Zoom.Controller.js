@@ -158,7 +158,7 @@ export const getAccessToken = async(req, res)=> {
       // Save the updated class
       await foundClass.save();
   
-      console.log("Class meeting information updated successfully");
+      console.log("Class meeting information updated successfully",foundClass);
     } catch (error) {
       console.error("Error updating class meeting information:", error.message);
       throw error; // You can choose to handle or propagate the error as needed
@@ -170,7 +170,7 @@ export const getAccessToken = async(req, res)=> {
     const apiKey = '_nLks8WMQDO1I34y6RQNXA';
     const apiSecret = 'hw06ETTGZMJ8s4LnphEi9A5SVtQUQNZJ';
     const { token,data } = req.body;
-    const meetingdata = data[0]
+    const meetingdata = data
     // Construct the API endpoint
     const endpoint = `https://api.zoom.us/v2/users/${userId}/meetings`;
   
