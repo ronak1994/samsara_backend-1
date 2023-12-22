@@ -7,6 +7,7 @@ import crypto from 'crypto';
 import cors from 'cors';
 import KJUR from 'jsrsasign';
 import jwt from 'jsonwebtoken';
+import { Class } from '../Models/Class.Model.js';
 
 const CLIENT_ID = 'USSKQRgqQwGWNLpTjHStQ';
 const CLIENT_SECRET = 'GkZ34TNaLUUsePqd0UkRmtJCM1uKa5mz';
@@ -140,24 +141,47 @@ export const getAccessToken = async(req, res)=> {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   };
+
+  const updateClassMeetingInfo = async (classId, newMeetingNumber, newMeetingPassword) => {
+    try {
+      // Find the class by ID
+      const foundClass = await Class.findById(classId);
+  
+      if (!foundClass) {
+        throw new Error("Class not found");
+      }
+  
+      // Update meeting number and password
+      foundClass.meeting_number = newMeetingNumber;
+      foundClass.password = newMeetingPassword;
+      foundClass.status = true;
+      // Save the updated class
+      await foundClass.save();
+  
+      console.log("Class meeting information updated successfully");
+    } catch (error) {
+      console.error("Error updating class meeting information:", error.message);
+      throw error; // You can choose to handle or propagate the error as needed
+    }
+  };
   
   export const createZoomMeeting = async (req, res) => {
     const userId = 'developer@theodin.in';
     const apiKey = '_nLks8WMQDO1I34y6RQNXA';
     const apiSecret = 'hw06ETTGZMJ8s4LnphEi9A5SVtQUQNZJ';
-    const { token } = req.body;
-  
+    const { token,data } = req.body;
+    const meetingdata = data[0]
     // Construct the API endpoint
     const endpoint = `https://api.zoom.us/v2/users/${userId}/meetings`;
   
     const requestBody = {
-      topic: "Discussion about today's Demo",
+      topic: meetingdata.title,
       type: 2,
       start_time: "2021-03-18T17:00:00",
-      duration: 20,
+      duration: 60,
       timezone: 'India',
-      password: '1234567',
-      agenda: "We will discuss about Today's Demo process",
+      password: meetingdata.password,
+      agenda: meetingdata.description,
       settings: {
         host_video: true,
         participant_video: true,
@@ -188,11 +212,12 @@ export const getAccessToken = async(req, res)=> {
   
       // Axios automatically throws an error for non-2xx responses
       const responseData = response.data;
-      console.log('Meeting created successfully:', responseData);
+      console.log('Meeting created successfully:', meetingdata);
   
       // Now you can send the meeting number to the frontend
       const meetingNumber = responseData.id;
       const password = responseData.password;
+      updateClassMeetingInfo(meetingdata._id,meetingNumber,password);
       res.json({ meetingNumber, password });
     } catch (error) {
       console.error('Error creating meeting:', error.response ? error.response.data : error.message);

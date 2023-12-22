@@ -1,4 +1,5 @@
 import { Class } from "../Models/Class.Model.js";
+import { Teacher } from "../Models/Teachers.Model.js";
 
 export const createClass = async (req, res) => {
   try {
@@ -11,7 +12,7 @@ export const createClass = async (req, res) => {
 
 export const getAllClasses = async (req, res) => {
   try {
-    const classes = await Class.find();
+    const classes = await Class.find().populate('teacher').exec();;
     res.json({ success: true, data: classes });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
