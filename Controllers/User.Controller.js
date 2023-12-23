@@ -7,7 +7,7 @@ export const loginUser = async (req, res) => {
 
         // Find the user by email
         const user = await User.findOne({ email }).select('+password');
-
+         console.log("User found", user);
         // Check if the user exists and the password is correct
         if (!user || !(await user.correctPassword(password, user.password))) {
             return res.status(401).json({
