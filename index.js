@@ -23,6 +23,7 @@ import { createTeacher, loginTeacher } from './Controllers/Teacher.Controller.js
 import multer from 'multer';
 import CustomSessionRouter from './Routes/CustomSession.Router.js';
 import RecordedClassRouter from './Routes/RecordedClass.Router.js';
+import Companyrouter from './Routes/Comapny.Router.js';
 // import path from 'path';
 // import { fileURLToPath } from 'url';
 // import { dirname } from 'path';
@@ -108,6 +109,7 @@ app.use('/api/events',eventsRouter)
 app.use('/api/assessment',assessmentRouter)
 app.use('/api/custom_session', CustomSessionRouter)
 app.use('/api/recorded-classes',RecordedClassRouter)
+app.use('/api/company',Companyrouter)
 app.listen(port, () =>{
     connection();
     console.log(`Zoom Meeting SDK Auth Endpoint Sample Node.js listening on port ${port}!`)
