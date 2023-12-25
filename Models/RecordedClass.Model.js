@@ -21,6 +21,9 @@ const classSchema = new Schema({
     type: String,
     required: true,
   },
+  teacher: { type: mongoose.Schema.Types.ObjectId,
+    ref: 'Teachers',
+    required: true, },
   // You can add more fields as needed, such as date, duration, etc.
 
   // Timestamps to track when the class was created and last updated

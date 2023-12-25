@@ -4,7 +4,7 @@ import RecordedClass from "../Models/RecordedClass.Model.js";
 // Get all classes
 export const getAllRecordedClass = async (req, res) => {
   try {
-    const classes = await RecordedClass.find();
+    const classes = await RecordedClass.find().populate('teacher').exec();
     res.json(classes);
   } catch (error) {
     res.status(500).json({ message: error.message });
