@@ -128,3 +128,36 @@ export const removeStudentFromClass = async (req, res) => {
       });
     }
   };
+
+
+  const updateClassMeetingInfo = async (classId, newMeetingNumber, newMeetingPassword) => {
+    try {
+      // Find the class by ID
+      const foundClass = await Class.findById(classId);
+  
+      if (!foundClass) {
+        throw new Error("Class not found");
+      }
+  
+      // Update meeting number and password
+      foundClass.meeting_number = "";
+      foundClass.status = false;
+      // Save the updated class
+      await foundClass.save();
+  
+      console.log("Class meeting information updated successfully",foundClass);
+    } catch (error) {
+      console.error("Error updating class meeting information:", error.message);
+      throw error; // You can choose to handle or propagate the error as needed
+    }
+  };
+
+  export const EndMeeting = async (req, res) => {
+    const { classId } = req.params;
+    try {
+      updateClassMeetingInfo(classId)
+      res.json({ success: true, message:"Metting End" });
+    } catch (error) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  };

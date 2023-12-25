@@ -1,5 +1,5 @@
 import express from 'express';
-import { addStudentToClass, assignTeacherToClass, createClass, deleteClass, getAllClasses, getClassById, getClassesByTeacher, removeStudentFromClass, updateClass } from '../Controllers/Classes.Controller.js';
+import { EndMeeting, addStudentToClass, assignTeacherToClass, createClass, deleteClass, getAllClasses, getClassById, getClassesByTeacher, removeStudentFromClass, updateClass } from '../Controllers/Classes.Controller.js';
 
 
 const classRouter = express.Router();
@@ -30,5 +30,7 @@ classRouter.put('/:classId/remove-student/:studentId', removeStudentFromClass);
 
 // Route for getting classes by teacher
 classRouter.get('/teacher/:teacherId', getClassesByTeacher);
+
+classRouter.delete('/end_meeting/:classId', EndMeeting);
 
 export default classRouter;
