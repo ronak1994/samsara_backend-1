@@ -24,6 +24,7 @@ import multer from 'multer';
 import CustomSessionRouter from './Routes/CustomSession.Router.js';
 import RecordedClassRouter from './Routes/RecordedClass.Router.js';
 import Companyrouter from './Routes/Comapny.Router.js';
+import { createReadStream } from "fs";
 // import path from 'path';
 // import { fileURLToPath } from 'url';
 // import { dirname } from 'path';
@@ -99,7 +100,11 @@ app.use('/admin',adminRouter)
 
 // app.use('/api', requireToken);
 
-
+app.get("/api/media/:imageName", (req, res) => {
+  const imageName = req.params.imageName;
+  const readStream = createReadStream(`media/${imageName}`);
+  readStream.pipe(res);
+});
 app.use('/api/users', userRouter);
 app.use('/api/teacher', teacherRouter);
 app.use('/api/zoom', zoomRouter);
