@@ -180,27 +180,27 @@ export const getAccessToken = async(req, res)=> {
       start_time: "2021-03-18T17:00:00",
       duration: 60,
       timezone: 'India',
-      password: meetingdata.password,
+      password: "",
       agenda: meetingdata.description,
       settings: {
         host_video: true,
         participant_video: true,
         cn_meeting: false,
         in_meeting: true,
-        join_before_host: false,
+        join_before_host: true,
         mute_upon_entry: false,
         watermark: false,
         use_pmi: false,
-        approval_type: 2,
+        approval_type: 1,
         audio: 'both',
         auto_recording: 'local',
         enforce_login: false,
         registrants_email_notification: false,
-        waiting_room: true,
+        waiting_room: false,
         allow_multiple_devices: true,
       },
     };
-  
+    // console.log("Req body",requestBody)
     try {
       // Make the POST request to create the meeting using Axios
       const response = await axios.post(endpoint, requestBody, {

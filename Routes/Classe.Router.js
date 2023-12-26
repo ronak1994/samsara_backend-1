@@ -31,6 +31,6 @@ classRouter.put('/:classId/remove-student/:studentId', removeStudentFromClass);
 // Route for getting classes by teacher
 classRouter.get('/teacher/:teacherId', getClassesByTeacher);
 
-classRouter.delete('/end_meeting/:classId', EndMeeting);
+classRouter.post('/end_meeting/:classId', EndMeeting);
 
 export default classRouter;

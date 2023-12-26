@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
 
 const companySchema = new mongoose.Schema({
-  ownerName: { type: String, required: true },
-  mobile: { type: String },
-  companyStartDate: { type: Date },
   companyName: { type: String },
-  companyId: { type: String },
+  consultPersonName: { type: String, required: true },
+  email: { type: String },
+  mobile: { type: String },
+  designation: { type: String },
   domain: { type: String },
   numberOfEmployees: { type: Number },
   gstNumber: { type: String },
@@ -13,7 +13,8 @@ const companySchema = new mongoose.Schema({
   city: { type: String },
   pincode: { type: String },
   country: { type: String },
-  status:{type:Boolean,default:true}
+  status:{type:Boolean,default:true},
+  createdAt: { type: Date, default: Date.now, required: true },
 });
 
 const Company = mongoose.model('Company', companySchema);

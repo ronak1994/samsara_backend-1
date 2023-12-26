@@ -26,12 +26,12 @@ const customSessionSchema = new mongoose.Schema({
   },
   approved: {
     type: Boolean,
-    default: false, // Sessions are unapproved by default
+    default: true, // Sessions are unapproved by default
   },
   status: {
     type: String,
     enum: ['pending', 'approved', 'done'], // You can customize the possible status values
-    default: 'pending',
+    default: 'approved',
   },
 });
 
