@@ -101,9 +101,21 @@ app.use('/admin',adminRouter)
 // app.use('/api', requireToken);
 
 app.get("/api/media/:imageName", (req, res) => {
-  const imageName = req.params.imageName;
-  const readStream = createReadStream(`media/${imageName}`);
-  readStream.pipe(res);
+  try{
+    const imageName = req.params.imageName;
+    const readStream = createReadStream(`media/${imageName}`);
+    if(!readStream){
+      readStream.pipe(res);
+    }
+    else{
+      res.send("No image found")
+    }
+    
+  }
+  catch(err){
+   res.send(err)
+  }
+ 
 });
 app.use('/api/users', userRouter);
 app.use('/api/teacher', teacherRouter);
