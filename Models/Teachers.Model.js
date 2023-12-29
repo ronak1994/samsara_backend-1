@@ -15,6 +15,9 @@ const teacherSchema = new mongoose.Schema({
         unique: true,
         validate: [validator.isEmail, 'Please provide a valid email']
     },
+    gender: {
+        type: String,
+    },
     password: {
         type: String,
         // required: [true, 'Please provide a password'],
@@ -24,6 +27,9 @@ const teacherSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please provide a mobile number'],
         minlength: 10
+    },
+    teachingExperience: {
+        type: String,
     },
     dob: {
         type: String,
