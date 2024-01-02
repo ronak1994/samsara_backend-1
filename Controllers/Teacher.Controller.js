@@ -112,9 +112,24 @@ export const getTeacherById = async (req, res) => {
 // Update a teacher by ID
 export const updateTeacher = async (req, res) => {
   try {
+
+    const TeacherData = req.body;
+    const qualificationData = req.body.qualification;
+    const additional_coursesData = req.body.additional_courses;
+      if (req.files && req.files.length > 0) {
+        // If images are provided, update the 'images' field
+        TeacherData.images = req.files.map(file => file.path);
+    } else {
+        // If no images provided, remove the 'images' field from userData
+        delete TeacherData.images;
+    }
+    const qualificationArray = JSON.parse(qualificationData);
+      const additional_coursesArray = JSON.parse(additional_coursesData);
+      TeacherData.qualification = qualificationArray;
+      TeacherData.additional_courses = additional_coursesArray;
     const updatedTeacher = await Teacher.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      TeacherData,
       {
         new: true,
         runValidators: true,

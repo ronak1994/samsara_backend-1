@@ -41,7 +41,7 @@ userRouter.get('/', getUsers);
 userRouter.get('/:id', getUserById);
 
 // Update a user by ID
-userRouter.patch('/:id', updateUser);
+userRouter.patch('/update/:id',upload.array('images', 1), updateUser);
 
 // Delete a user by ID
 userRouter.delete('/:id', deleteUser);

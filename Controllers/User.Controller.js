@@ -106,10 +106,20 @@ export const getUserById = async (req, res) => {
 // Update a user by ID
 export const updateUser = async (req, res) => {
     try {
-        const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
+      // console.log('Updating user', req.body)
+      const userData = req.body;
+      if (req.files && req.files.length > 0) {
+        // If images are provided, update the 'images' field
+        userData.images = req.files.map(file => file.path);
+    } else {
+        // If no images provided, remove the 'images' field from userData
+        delete userData.images;
+    }
+        const updatedUser = await User.findByIdAndUpdate(req.params.id, userData, {
             new: true,
             runValidators: true
         });
+        // console.log(updatedUser)
         res.status(200).json({
             status: 'success',
             data: {
