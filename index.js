@@ -25,6 +25,8 @@ import CustomSessionRouter from './Routes/CustomSession.Router.js';
 import RecordedClassRouter from './Routes/RecordedClass.Router.js';
 import Companyrouter from './Routes/Comapny.Router.js';
 import { createReadStream } from "fs";
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
 // import path from 'path';
 // import { fileURLToPath } from 'url';
 // import { dirname } from 'path';
@@ -99,12 +101,37 @@ app.use('/admin',adminRouter)
 // Add the middleware to secure your routes
 
 // app.use('/api', requireToken);
-
-app.get("/api/media/:imageName", (req, res) => {
+const mediaPath = 'media/';
+app.get('/api/media/:imageName', (req, res) => {
   const imageName = req.params.imageName;
-  const readStream = createReadStream(`media/${imageName}`);
-  readStream.pipe(res);
+  const imagePath = resolve(mediaPath, imageName);
+
+  // Check if the requested image exists
+  if (fileExists(imagePath)) {
+    const readStream = createReadStream(imagePath);
+    readStream.pipe(res);
+  } else {
+    // If the image doesn't exist, serve a default image
+    const currentModulePath = fileURLToPath(import.meta.url);
+    const currentModuleDir = dirname(currentModulePath);
+    const defaultImagePath = resolve(currentModuleDir, 'media', 'default-image.jpg');
+    const defaultImageStream = createReadStream(defaultImagePath);
+    
+    defaultImageStream.on('error', (err) => {
+      res.status(404).send('Default image not found');
+    });
+
+    defaultImageStream.pipe(res);
+  }
 });
+
+function fileExists(filePath) {
+  try {
+    return fs.statSync(filePath).isFile();
+  } catch (err) {
+    return false;
+  }
+}
 app.use('/api/users', userRouter);
 app.use('/api/teacher', teacherRouter);
 app.use('/api/zoom', zoomRouter);
