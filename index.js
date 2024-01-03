@@ -24,8 +24,8 @@ import multer from 'multer';
 import CustomSessionRouter from './Routes/CustomSession.Router.js';
 import RecordedClassRouter from './Routes/RecordedClass.Router.js';
 import Companyrouter from './Routes/Comapny.Router.js';
-import { createReadStream } from "fs";
-import { resolve, dirname } from 'path';
+import { createReadStream, promises as fsPromises } from 'fs';
+import { resolve, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 // import path from 'path';
 // import { fileURLToPath } from 'url';
@@ -102,12 +102,12 @@ app.use('/admin',adminRouter)
 
 // app.use('/api', requireToken);
 const mediaPath = 'media/';
-app.get('/api/media/:imageName', (req, res) => {
+app.get('/api/media/:imageName', async (req, res) => {
   const imageName = req.params.imageName;
-  const imagePath = resolve(mediaPath, imageName);
+  const imagePath = join(mediaPath, imageName);
 
   // Check if the requested image exists
-  if (fileExists(imagePath)) {
+  if (await fileExists(imagePath)) {
     const readStream = createReadStream(imagePath);
     readStream.pipe(res);
   } else {
@@ -116,7 +116,7 @@ app.get('/api/media/:imageName', (req, res) => {
     const currentModuleDir = dirname(currentModulePath);
     const defaultImagePath = resolve(currentModuleDir, 'media', 'default-image.jpg');
     const defaultImageStream = createReadStream(defaultImagePath);
-    
+
     defaultImageStream.on('error', (err) => {
       res.status(404).send('Default image not found');
     });
@@ -125,13 +125,17 @@ app.get('/api/media/:imageName', (req, res) => {
   }
 });
 
-function fileExists(filePath) {
+async function fileExists(filePath) {
   try {
-    return fs.statSync(filePath).isFile();
+    await fsPromises.access(filePath);
+    console.log("File exists");
+    return true;
   } catch (err) {
+    console.log("File does not exist");
     return false;
   }
 }
+
 app.use('/api/users', userRouter);
 app.use('/api/teacher', teacherRouter);
 app.use('/api/zoom', zoomRouter);
