@@ -18,7 +18,7 @@ import assessmentRouter from './Routes/Assessment.Router.js';
 import adminRouter from './Routes/Admin.Router.js';
 import { User } from './Models/User.Model.js';
 import { Teacher } from './Models/Teachers.Model.js';
-import { createUser, loginUser, uploadImages } from './Controllers/User.Controller.js';
+import { createUser, loginUser, loginUserByMobile, uploadImages } from './Controllers/User.Controller.js';
 import { createTeacher, loginTeacher } from './Controllers/Teacher.Controller.js';
 import multer from 'multer';
 import CustomSessionRouter from './Routes/CustomSession.Router.js';
@@ -72,6 +72,7 @@ app.get('/', (req, res) => {
   const upload = multer({ storage: storage });
   // app.use('/media', express.static(path.join(__dirname, 'media')));
 app.post('/student_login',loginUser)
+app.post('/student_loginbymobile',loginUserByMobile)
 app.post('/student_signup',upload.array('images', 1),createUser)
 app.post('/teacher_login',loginTeacher)
 app.post('/teacher_signup',upload.array('images', 2),createTeacher)
