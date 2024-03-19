@@ -70,7 +70,7 @@ export const createUser = async (req, res) => {
 // Get all users
 export const getUsers = async (req, res) => {
     try {
-        const users = await User.find();
+        const users = await User.find().populate('company_name').exec();
         res.status(200).json({
             status: 'success',
             data: {
@@ -88,7 +88,7 @@ export const getUsers = async (req, res) => {
 // Get a single user by ID
 export const getUserById = async (req, res) => {
     try {
-        const user = await User.findById(req.params.id);
+        const user = await User.findById(req.params.id).populate('company_name').exec();
         res.status(200).json({
             status: 'success',
             data: {

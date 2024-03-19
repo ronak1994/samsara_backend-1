@@ -12,9 +12,11 @@ const userSchema = new mongoose.Schema({
     gender: {
         type: String
     },
-    company_name: {
-        type: String,
-    },
+    company_name:  {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Company', // Reference to the Worker model (if applicable)
+      },
+  
     corporate_id:{
         type:String
     },
