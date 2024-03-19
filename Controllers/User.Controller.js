@@ -36,6 +36,38 @@ export const loginUser = async (req, res) => {
     }
 };
 
+export const loginUserByMobile = async (req, res) => {
+  const { mobile, password } = req.body;
+
+  try {
+      // Check if user exists with the provided mobile number
+      const user = await User.findOne({ mobile });
+
+      if (!user || !(await user.correctPassword(password, user.password))) {
+        return res.status(401).json({
+            status: 'fail',
+            message: 'Incorrect Mobile or password'
+        });
+    }
+
+    // Generate a token and send it along with user data
+    const token = jwt.sign({ id: user._id }, 'your-secret-key', {
+        expiresIn: '1h' // Adjust the expiration as needed
+    });
+
+    res.status(200).json({
+        status: 'success',
+        token,
+        data: {
+            user
+        }
+    });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error',error });
+  }
+};
+
 
 // Create a new user
 export const createUser = async (req, res) => {

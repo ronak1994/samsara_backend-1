@@ -11,7 +11,8 @@ import {
     addAchievement,
     addAssessment,
     submitAssessmentForm,
-    uploadImages
+    uploadImages,
+    loginUserByMobile
 } from '../Controllers/User.Controller.js';
 import multer from 'multer';
 
@@ -34,6 +35,7 @@ const upload = multer({ storage: storage });
 userRouter.post('/',upload.array('images', 5), createUser);
 
 userRouter.post('/login', loginUser);
+userRouter.post('/loginByMobile', loginUserByMobile);
 // Get all users
 userRouter.get('/', getUsers);
 
