@@ -44,8 +44,8 @@ export const loginUserByMobile = async (req, res) => {
       const user = await User.findOne({ mobile });
 
       if (!user || !(await user.correctPassword(password, user.password))) {
-        return res.status(401).json({
-            status: 'fail',
+        return res.status(200).json({
+            status: 'Not Found',
             message: 'Incorrect Mobile or password'
         });
     }
