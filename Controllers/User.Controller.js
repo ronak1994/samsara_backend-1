@@ -41,7 +41,7 @@ export const loginUserByMobile = async (req, res) => {
 
   try {
       // Check if user exists with the provided mobile number
-      const user = await User.findOne({ mobile });
+      const user = await User.findOne({ mobile }).populate('company_name').exec();
 
       if (!user || !(await user.correctPassword(password, user.password))) {
         return res.status(200).json({

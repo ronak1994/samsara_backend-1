@@ -64,8 +64,6 @@ const teacherSchema = new mongoose.Schema({
     additional_courses:[Object],
     description: {
         type: String,
-        
-        
     },
     passwordChangedAt: Date,
     passwordResetToken: String,
