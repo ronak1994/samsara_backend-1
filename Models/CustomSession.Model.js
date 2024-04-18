@@ -1,6 +1,21 @@
 // Assuming you're using ES6 syntax and have already imported mongoose
 import mongoose from 'mongoose';
 
+// New model for time slots
+const timeSlotSchema = new mongoose.Schema({
+  timeRange: {
+    type: String,
+    required: true,
+  },
+  available: {
+    type: Boolean,
+    default: true, // Slots are available by default
+  },
+});
+
+const TimeSlot = mongoose.model('TimeSlot', timeSlotSchema);
+
+// Modified CustomSession model
 const customSessionSchema = new mongoose.Schema({
   teacher: {
     type: mongoose.Schema.Types.ObjectId,
@@ -12,29 +27,26 @@ const customSessionSchema = new mongoose.Schema({
     ref: 'Users',
     required: true,
   },
-  date: {
-    type: Date,
-    required: true,
-  },
-  time: {
-    type: String, // You might want to use a specific time format or a Date object depending on your requirements
+  timeSlot: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'TimeSlot',
     required: true,
   },
   message: {
     type: String,
     required: true,
   },
-  approved: {
-    type: Boolean,
-    default: true, // Sessions are unapproved by default
+  date:{
+    type: String,
+    required: true,
   },
   status: {
     type: String,
-    enum: ['pending', 'approved', 'done'], // You can customize the possible status values
-    default: 'approved',
+    enum: ['pending', 'approved', 'done'],
+    default: 'pending', // Sessions are pending by default
   },
 });
 
 const CustomSession = mongoose.model('CustomSession', customSessionSchema);
 
-export default CustomSession;
+export { CustomSession, TimeSlot };

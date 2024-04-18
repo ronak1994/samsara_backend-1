@@ -1,4 +1,5 @@
-import CustomSession from "../Models/CustomSession.Model.js";
+import { CustomSession, TimeSlot } from "../Models/CustomSession.Model.js";
+
 
 
 // Create a new custom session
@@ -15,7 +16,7 @@ const createSession = async (req, res) => {
 // Get all custom sessions
 const getAllSessions = async (req, res) => {
   try {
-    const sessions = await CustomSession.find().populate('teacher').populate('user').exec();
+    const sessions = await CustomSession.find().populate('teacher').populate('user').populate('timeSlot').exec();
     res.status(200).json(sessions);
   } catch (error) {
     res.status(500).json({ error: 'Error fetching sessions', details: error.message });
@@ -26,7 +27,7 @@ const getAllSessions = async (req, res) => {
 const getSessionById = async (req, res) => {
   const sessionId = req.params.id;
   try {
-    const session = await CustomSession.findById(sessionId);
+    const session = await CustomSession.findById(sessionId).populate('teacher').populate('user').populate('timeSlot').exec();
     if (!session) {
       res.status(404).json({ error: 'Session not found' });
       return;
@@ -102,11 +103,73 @@ const approveSession = async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   };
+
+  // ===============================================================================================================
+
+  const createTimeSlot = async (req, res) => {
+    try {
+      const { timeRange } = req.body;
+      console.log("Tiem Slot  ===>",timeRange)
+     
+      const newTimeSlot = new TimeSlot({ timeRange });
+      await newTimeSlot.save();
+      res.status(201).json(newTimeSlot);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
+  
+  const getAllTimeSlots = async (req, res) => {
+    try {
+      console.log("Data =====>")
+      const timeSlots = await TimeSlot.find();
+      res.json(timeSlots);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
+  
+  const getTimeSlotById = async (req, res) => {
+    try {
+      const timeSlot = await TimeSlot.findById(req.params.id);
+      if (timeSlot) {
+        res.json(timeSlot);
+      } else {
+        res.status(404).json({ message: "Time slot not found" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
+  
+  const updateTimeSlot = async (req, res) => {
+    try {
+      const { timeRange } = req.body;
+      await TimeSlot.findByIdAndUpdate(req.params.id, { timeRange });
+      res.json({ message: "Time slot updated successfully" });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
+  
+  const deleteTimeSlot = async (req, res) => {
+    try {
+      await TimeSlot.findByIdAndDelete(req.params.id);
+      res.json({ message: "Time slot deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
 export {
   createSession,
   getAllSessions,
   getSessionById,
   updateSessionById,
   deleteSessionById,
-  approveSession
+  approveSession,
+  createTimeSlot,
+  getAllTimeSlots,
+  getTimeSlotById,
+  updateTimeSlot,
+  deleteTimeSlot
 };
