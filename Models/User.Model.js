@@ -6,7 +6,7 @@ import validator from 'validator';
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, 'A user must have a name'],
+        required: [false, 'A user must have a name'],
         maxlength: [20, 'Username must be less than or equal to 10 characters.']
     },
     gender: {
@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: [true, 'Please provide your email'],
+        required: [false, 'Please provide your email'],
         unique: true,
         validate: [validator.isEmail, 'Please provide a valid email']
     },
@@ -33,51 +33,51 @@ const userSchema = new mongoose.Schema({
     },
     mobile: {
         type: String,
-        required: [true, 'Please provide a mobile number'],
+        required: [false, 'Please provide a mobile number'],
         minlength: 10
     },
     dob: {
         type: String,
-        required: [true, 'Please provide  data of birth'],
+        required: [false, 'Please provide  data of birth'],
         
     },
     Address:{
         type: String,
-        required: [true, 'Please provide  address'],
+        required: [false, 'Please provide  address'],
     },
     city: {
         type: String,
-        required: [true, 'A user must have a city'],
+        required: [false, 'A user must have a city'],
         
     },
     pincode: {
         type: String,
-        required: [true, 'A user must have a pincode'],
+        required: [false, 'A user must have a pincode'],
         
     },
     country: {
         type: String,
-        required: [true, 'A user must have a country'],
+        required: [false, 'A user must have a country'],
         
     },
     height: {
         type: String,
-        required: [true, 'user height is required'],
+        required: [false, 'user height is required'],
         
     },
     weight: {
         type: String,
-        required: [true, 'user weight is required'],
+        required: [false, 'user weight is required'],
         
     },
     health_issues:[String],
     howyouknowus:{
      type:String,
-     required: [true, 'howyouknowus is required'],
+     required: [false, 'howyouknowus is required'],
     },
     PriorExperience:{
         type:String,
-        required: [true, 'PriorExperience is required'],
+        required: [false, 'PriorExperience is required'],
     },
     description: {
         type: String,
