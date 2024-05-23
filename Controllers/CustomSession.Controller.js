@@ -70,27 +70,20 @@ const deleteSessionById = async (req, res) => {
 
 const approveSession = async (req, res) => {
     const { sessionId } = req.params;
-     const {status} = req.body;
+     const {value} = req.body;
     try {
       // Find the session by ID
       const session = await CustomSession.findById(sessionId);
-  
+      
       if (!session) {
         return res.status(404).json({ error: 'Session not found' });
       }
-      session.sessionValue = status;
+      // console.log("Session  ==>",session)
+      session.sessionValue = value;
+
+      // console.log("Session  ==>",session)
       await session.save();
-      // Check if the session is already approved
-   
-  
-      // Update the status to 'approved' and set 'approved' to true
-     
-    
-  
-      // Save the updated session
-   
-  
-      // Return the updated session
+
       res.json(session);
     } catch (error) {
       console.error(error);
