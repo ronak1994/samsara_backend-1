@@ -32,6 +32,8 @@ const customSessionSchema = new mongoose.Schema({
     ref: 'TimeSlot',
     required: true,
   },
+  password: { type: String},
+  meeting_number:{ type: String},
   message: {
     type: String,
     required: true,
@@ -40,10 +42,13 @@ const customSessionSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  status: {
+  sessionValue: {
     type: String,
-    enum: ['pending', 'approved', 'done'],
     default: 'pending', // Sessions are pending by default
+  },
+  status: {
+    type: Boolean,
+    default: false,
   },
 });
 

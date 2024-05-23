@@ -11,7 +11,8 @@ import {
   getAllTimeSlots,
   getTimeSlotById,
   updateTimeSlot,
-  deleteTimeSlot
+  deleteTimeSlot,
+  EndSessionMeeting
 } from '../Controllers/CustomSession.Controller.js';
 
 const CustomSessionRouter = express.Router();
@@ -38,5 +39,7 @@ CustomSessionRouter.put('/time-slots/:id', updateTimeSlot);
 
 // Route for deleting a time slot by ID
 CustomSessionRouter.delete('/time-slots/:id', deleteTimeSlot);
+
+CustomSessionRouter.post('/end_meeting/:classId', EndSessionMeeting);
 
 export default CustomSessionRouter;

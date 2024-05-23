@@ -70,7 +70,7 @@ const deleteSessionById = async (req, res) => {
 
 const approveSession = async (req, res) => {
     const { sessionId } = req.params;
-  
+     const {status} = req.body;
     try {
       // Find the session by ID
       const session = await CustomSession.findById(sessionId);
@@ -78,23 +78,17 @@ const approveSession = async (req, res) => {
       if (!session) {
         return res.status(404).json({ error: 'Session not found' });
       }
-  
+      session.sessionValue = status;
+      await session.save();
       // Check if the session is already approved
-      if (session.status === 'approved') {
-        session.status = 'pending';
-        session.approved = false;
-        
-      }
+   
   
       // Update the status to 'approved' and set 'approved' to true
-      else{
-        session.status = 'approved';
-        session.approved = true;
-      }
+     
     
   
       // Save the updated session
-      await session.save();
+   
   
       // Return the updated session
       res.json(session);
@@ -160,6 +154,61 @@ const approveSession = async (req, res) => {
       res.status(500).json({ message: error.message });
     }
   };
+
+  const updateClassMeetingInfo = async (classId, newMeetingNumber, newMeetingPassword) => {
+    try {
+      // Find the class by ID
+      const foundClass = await CustomSession.findById(classId);
+  
+      if (!foundClass) {
+        throw new Error("Class not found");
+      }
+  
+      // Update meeting number and password
+      foundClass.meeting_number = "";
+      foundClass.status = false;
+      // Save the updated class
+      await foundClass.save();
+  
+      // console.log("Class meeting information updated successfully",foundClass);
+    } catch (error) {
+      console.error("Error updating class meeting information:", error.message);
+      throw error; // You can choose to handle or propagate the error as needed
+    }
+  };
+
+   const deleteMeeting =async(token,meetingId)=> {
+    // console.log("Token ====>",token);
+    // console.log("MeetingId ====>",meetingId);
+    try {
+      const result = await axios.delete("https://api.zoom.us/v2/meetings/" + meetingId, {
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'User-Agent': 'Zoom-api-Jwt-Request',
+          'content-type': 'application/json'
+        }
+      });
+      // console.log("Meeting delete Successfully =======>",result)
+      // sendResponse.setSuccess(200, 'Success', result.data);
+      return result;
+    } catch (error) {
+      console.log(error);
+     
+    }
+  }
+
+ const EndSessionMeeting = async (req, res) => {
+    const { classId } = req.params;
+    const {token,meetingId} = req.body;
+    try {
+      updateClassMeetingInfo(classId);
+      // console.log("End meeting ====>",token,"ID ==================>",meetingId)
+      deleteMeeting(token,meetingId);
+      res.json({ success: true, message:"Metting End" });
+    } catch (error) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  };
 export {
   createSession,
   getAllSessions,
@@ -171,5 +220,6 @@ export {
   getAllTimeSlots,
   getTimeSlotById,
   updateTimeSlot,
-  deleteTimeSlot
+  deleteTimeSlot,
+  EndSessionMeeting
 };
