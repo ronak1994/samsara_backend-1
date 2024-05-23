@@ -23,7 +23,7 @@ export const getAllClasses = async (req, res) => {
 export const getClassById = async (req, res) => {
   const { classId } = req.params;
   try {
-    const foundClass = await Class.findById(classId);
+    const foundClass = await Class.findById(classId).populate('teacher').exec();;
     res.json({ success: true, data: foundClass });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
