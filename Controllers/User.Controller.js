@@ -72,10 +72,11 @@ export const loginUserByMobile = async (req, res) => {
 // Create a new user
 export const createUser = async (req, res) => {
     try {
+      console.log("Data ==>",req.body)
       // console.log("images",req.file)
       const userData = req.body;
-
-      const images = req.files;
+              
+      const images = req.files || [];
       //  console.log("Images",images)
        
         userData.images = images.map(file => ({
@@ -92,6 +93,7 @@ export const createUser = async (req, res) => {
             }
         });
     } catch (error) {
+      console.log("Error",error)
         res.status(400).json({
             status: 'fail',
             message: error.message
