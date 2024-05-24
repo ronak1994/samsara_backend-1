@@ -12,7 +12,8 @@ import {
     addAssessment,
     submitAssessmentForm,
     uploadImages,
-    loginUserByMobile
+    loginUserByMobile,
+    getUserFind
 } from '../Controllers/User.Controller.js';
 import multer from 'multer';
 
@@ -38,7 +39,7 @@ userRouter.post('/login', loginUser);
 userRouter.post('/loginByMobile', loginUserByMobile);
 // Get all users
 userRouter.get('/', getUsers);
-
+userRouter.get('/find/:mobile', getUserFind);
 // Get a single user by ID
 userRouter.get('/:id', getUserById);
 

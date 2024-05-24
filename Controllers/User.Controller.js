@@ -118,6 +118,32 @@ export const getUsers = async (req, res) => {
         });
     }
 };
+export const getUserFind = async (req, res) => {
+  try {
+    
+    const mobile = req.params.mobile;
+
+    const user = await User.findOne({ mobile });
+
+    if (user) {
+        res.status(200).json({
+            success: true,
+            data: user,
+            message: 'User found',
+        });
+    } else {
+        res.status(200).json({
+            success: false,
+            message: 'User not found',
+        });
+    }
+  } catch (error) {
+      res.status(500).json({
+          status: 'fail',
+          message: error.message
+      });
+  }
+};
 
 // Get a single user by ID
 export const getUserById = async (req, res) => {
