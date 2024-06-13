@@ -1,15 +1,31 @@
-// adminRoutes.js
 import express from 'express';
-import { createAdmin, deleteAdmin, getAdminById, getAdmins, updateAdmin } from '../Controllers/Admin.Controller.js';
+import { changePassword, changeUsername, createAdmin, deleteAdmin, getAdminById, getAllAdmins, loginController, updateAdmin } from '../Controllers/Admin.Controller.js';
+// import { changePassword, changeUsername, createAdmin, deleteAdmin, getAdminById, getAllAdmins, loginController, updateAdmin } from '../Controllers/Admin.Controller.js';
 
 
-const adminRouter = express.Router();
+const AdminRouter = express.Router();
 
-// CRUD routes for admins
-adminRouter.post('/', createAdmin);
-adminRouter.get('/', getAdmins);
-adminRouter.get('/:id', getAdminById);
-adminRouter.put('/:id', updateAdmin);
-adminRouter.delete('/:id', deleteAdmin);
+// Route to create a new admin
+AdminRouter.post('/login',loginController)
 
-export default adminRouter;
+AdminRouter.post('/', createAdmin);
+
+// Route to get all admins
+AdminRouter.get('/', getAllAdmins);
+
+// Route to get admin by ID
+AdminRouter.get('/:id', getAdminById);
+
+// Route to update admin by ID
+AdminRouter.put('/:id', updateAdmin);
+
+// Route to delete admin by ID
+AdminRouter.delete('/:id',deleteAdmin);
+
+// Route to change password for an admin
+AdminRouter.post('/:id/change-password', changePassword);
+
+// Route to change username for an admin
+AdminRouter.post('/:id/change-username',changeUsername);
+
+export default AdminRouter;

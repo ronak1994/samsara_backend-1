@@ -15,9 +15,6 @@ import meetingRouter from './Routes/Meeting.Router.js';
 import classRouter from './Routes/Classe.Router.js';
 import eventsRouter from './Routes/Events.Router.js';
 import assessmentRouter from './Routes/Assessment.Router.js';
-import adminRouter from './Routes/Admin.Router.js';
-import { User } from './Models/User.Model.js';
-import { Teacher } from './Models/Teachers.Model.js';
 import { createUser, loginUser, loginUserByMobile, uploadImages } from './Controllers/User.Controller.js';
 import { createTeacher, loginTeacher } from './Controllers/Teacher.Controller.js';
 import multer from 'multer';
@@ -27,6 +24,7 @@ import Companyrouter from './Routes/Comapny.Router.js';
 import { createReadStream, promises as fsPromises } from 'fs';
 import { resolve, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+import AdminRouter from './Routes/Admin.Router.js';
 // import path from 'path';
 // import { fileURLToPath } from 'url';
 // import { dirname } from 'path';
@@ -71,12 +69,13 @@ app.get('/', (req, res) => {
   });
   const upload = multer({ storage: storage });
   // app.use('/media', express.static(path.join(__dirname, 'media')));
+  app.use('/admin', AdminRouter);
 app.post('/student_login',loginUser)
 app.post('/student_loginbymobile',loginUserByMobile)
 app.post('/student_signup',upload.array('images', 1),createUser)
 app.post('/teacher_login',loginTeacher)
 app.post('/teacher_signup',upload.array('images', 2),createTeacher)
-app.use('/admin',adminRouter)
+
 
 // JWT Middleware
  const requireToken = (req, res, next) => {
