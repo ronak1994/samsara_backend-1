@@ -179,7 +179,7 @@ export const updateUser = async (req, res) => {
             new: true,
             runValidators: true
         });
-        console.log(updatedUser)
+        // console.log(updatedUser)
         res.status(200).json({
             status: 'success',
             data: {
@@ -187,7 +187,7 @@ export const updateUser = async (req, res) => {
             }
         });
     } catch (error) {
-      console.log("Error while update user ==>",error)
+      // console.log("Error while update user ==>",error)
         res.status(400).json({
             status: 'fail',
             message: error

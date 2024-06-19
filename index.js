@@ -25,6 +25,7 @@ import { createReadStream, promises as fsPromises } from 'fs';
 import { resolve, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import AdminRouter from './Routes/Admin.Router.js';
+import EventApplicationRouter from './Routes/EventApplication.Routes.js';
 // import path from 'path';
 // import { fileURLToPath } from 'url';
 // import { dirname } from 'path';
@@ -142,6 +143,7 @@ app.use('/api/zoom', zoomRouter);
 app.use('/api/meeting', meetingRouter);
 app.use('/api/classes', classRouter);
 app.use('/api/events',eventsRouter)
+app.use('/api/event-applications', EventApplicationRouter);
 app.use('/api/assessment',assessmentRouter)
 app.use('/api/custom_session', CustomSessionRouter)
 app.use('/api/recorded-classes',RecordedClassRouter)
