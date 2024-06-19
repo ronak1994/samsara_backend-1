@@ -25,8 +25,8 @@ const eventSchema = new mongoose.Schema({
         type: String,
        
     },
-    password: { type: String},
-    meeting_number:{ type: String},
+    password: { type: String,default:""},
+    meeting_number:{ type: String,default:""},
     status: {
         type: Boolean,
         default: true,
