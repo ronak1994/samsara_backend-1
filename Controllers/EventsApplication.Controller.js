@@ -65,3 +65,15 @@ export const deleteEventApplication = async (req, res) => {
         res.status(500).json({ message: 'Server error', error });
     }
 };
+
+export const getEventsByUserId = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        
+        const eventApplications = await EventApplication.find({ userId }).populate('eventId').exec();
+        
+        res.status(200).json(eventApplications);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching events', error });
+    }
+};
