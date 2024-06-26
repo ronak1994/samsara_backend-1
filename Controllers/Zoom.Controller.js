@@ -9,6 +9,7 @@ import KJUR from 'jsrsasign';
 import jwt from 'jsonwebtoken';
 import { Class } from '../Models/Class.Model.js';
 import { CustomSession } from '../Models/CustomSession.Model.js';
+import Event from '../Models/Event.Model.js';
 
 const CLIENT_ID = 'USSKQRgqQwGWNLpTjHStQ';
 const CLIENT_SECRET = 'GkZ34TNaLUUsePqd0UkRmtJCM1uKa5mz';
@@ -308,6 +309,91 @@ export const getAccessToken = async(req, res)=> {
       res.status(500).send('Internal Server Error');
     }
   };
+
+
+  const updateEventClassMeetingInfo = async (classId, newMeetingNumber, newMeetingPassword) => {
+    try {
+      // Find the class by ID
+      const foundClass = await Event.findById(classId);
+  
+      if (!foundClass) {
+        throw new Error("Class not found");
+      }
+  
+      // Update meeting number and password
+      foundClass.meeting_number = newMeetingNumber;
+      foundClass.password = newMeetingPassword;
+      foundClass.status = true;
+      // Save the updated class
+      await foundClass.save();
+  
+      console.log("Class meeting information updated successfully",foundClass);
+    } catch (error) {
+      console.error("Error updating class meeting information:", error.message);
+      throw error; // You can choose to handle or propagate the error as needed
+    }
+  };
+
+  export const createEventZoomMeeting = async (req, res) => {
+    const userId = 'developer@theodin.in';
+    const apiKey = '_nLks8WMQDO1I34y6RQNXA';
+    const apiSecret = 'hw06ETTGZMJ8s4LnphEi9A5SVtQUQNZJ';
+    const { token,data } = req.body;
+    const meetingdata = data
+    // Construct the API endpoint
+    const endpoint = `https://api.zoom.us/v2/users/${userId}/meetings`;
+  
+    const requestBody = {
+      topic: meetingdata.title,
+      type: 2,
+      start_time: "2021-03-18T17:00:00",
+      duration: 60,
+      timezone: 'India',
+      password: "",
+      agenda: meetingdata.description,
+      settings: {
+        host_video: true,
+        participant_video: true,
+        cn_meeting: false,
+        in_meeting: true,
+        join_before_host: true,
+        mute_upon_entry: false,
+        watermark: false,
+        use_pmi: false,
+        approval_type: 1,
+        audio: 'both',
+        auto_recording: 'local',
+        enforce_login: false,
+        registrants_email_notification: false,
+        waiting_room: false,
+        allow_multiple_devices: true,
+      },
+    };
+    // console.log("Req body",requestBody)
+    try {
+      // Make the POST request to create the meeting using Axios
+      const response = await axios.post(endpoint, requestBody, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`, // You need to implement a function to generate a JWT token
+        },
+      });
+  
+      // Axios automatically throws an error for non-2xx responses
+      const responseData = response.data;
+      console.log('Meeting created successfully:', meetingdata);
+  
+      // Now you can send the meeting number to the frontend
+      const meetingNumber = responseData.id;
+      const password = responseData.password;
+      updateEventClassMeetingInfo(meetingdata._id,meetingNumber,password);
+      res.json({ meetingNumber, password });
+    } catch (error) {
+      console.error('Error creating meeting:', error.response ? error.response.data : error.message);
+      res.status(500).send('Internal Server Error');
+    }
+  };
+
   export const zoomuserInfo=async(req, res, next)=> {
     try {
       const token = req.body.token;

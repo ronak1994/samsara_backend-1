@@ -1,5 +1,6 @@
 // controllers/eventController.js
 
+import axios from "axios";
 import Event from "../Models/Event.Model.js";
 
 
@@ -64,3 +65,59 @@ export const deleteEvent = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+
+const updateClassMeetingInfo = async (classId, newMeetingNumber, newMeetingPassword) => {
+    try {
+      // Find the class by ID
+      const foundClass = await Event.findById(classId);
+  
+      if (!foundClass) {
+        throw new Error("Class not found");
+      }
+  
+      // Update meeting number and password
+      foundClass.meeting_number = "";
+      foundClass.status = false;
+      // Save the updated class
+      await foundClass.save();
+  
+      // console.log("Class meeting information updated successfully",foundClass);
+    } catch (error) {
+      console.error("Error updating class meeting information:", error.message);
+      throw error; // You can choose to handle or propagate the error as needed
+    }
+  };
+
+   const deleteMeeting =async(token,meetingId)=> {
+    // console.log("Token ====>",token);
+    // console.log("MeetingId ====>",meetingId);
+    try {
+      const result = await axios.delete("https://api.zoom.us/v2/meetings/" + meetingId, {
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'User-Agent': 'Zoom-api-Jwt-Request',
+          'content-type': 'application/json'
+        }
+      });
+      // console.log("Meeting delete Successfully =======>",result)
+      // sendResponse.setSuccess(200, 'Success', result.data);
+      return result;
+    } catch (error) {
+      console.log(error);
+     
+    }
+  }
+
+ export const EndEventMeeting = async (req, res) => {
+    const { classId } = req.params;
+    const {token,meetingId} = req.body;
+    try {
+      updateClassMeetingInfo(classId);
+      // console.log("End meeting ====>",token,"ID ==================>",meetingId)
+      deleteMeeting(token,meetingId);
+      res.json({ success: true, message:"Metting End" });
+    } catch (error) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  };

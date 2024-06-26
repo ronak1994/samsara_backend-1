@@ -2,7 +2,7 @@
 
 // routes/eventRoutes.js
 import express from 'express';
-import { createEvent, deleteEvent, getAllEvents, getEventById, updateEvent } from '../Controllers/Events.Controller.js';
+import { EndEventMeeting, createEvent, deleteEvent, getAllEvents, getEventById, updateEvent } from '../Controllers/Events.Controller.js';
 
 
 const eventsRouter = express.Router();
@@ -21,5 +21,7 @@ eventsRouter.put('/:id', updateEvent);
 
 // Delete event
 eventsRouter.delete('/:id', deleteEvent);
+
+eventsRouter.post('/end_meeting/:classId', EndEventMeeting);
 
 export default eventsRouter;
