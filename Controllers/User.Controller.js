@@ -1,5 +1,6 @@
 import { User } from "../Models/User.Model.js";
 import jwt from 'jsonwebtoken';
+import { Mood } from "../Models/UserMood.Model.js";
 
 export const loginUser = async (req, res) => {
     try {
@@ -86,6 +87,11 @@ export const createUser = async (req, res) => {
       
 
         const newUser = await User.create(userData);
+        const defaultMood = {
+          userId: newUser._id,
+          mood: 'Happy' // You can set a default mood value
+        };
+        await Mood.create(defaultMood);
         res.status(201).json({
             status: 'success',
             data: {
