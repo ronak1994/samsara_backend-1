@@ -27,6 +27,7 @@ import { fileURLToPath } from 'url';
 import AdminRouter from './Routes/Admin.Router.js';
 import EventApplicationRouter from './Routes/EventApplication.Routes.js';
 import UserMoodRouter from './Routes/UserMood.Router.js';
+import MembershipRouter from './Routes/Membership.Router.js';
 // import path from 'path';
 // import { fileURLToPath } from 'url';
 // import { dirname } from 'path';
@@ -150,6 +151,8 @@ app.use('/api/custom_session', CustomSessionRouter)
 app.use('/api/recorded-classes',RecordedClassRouter)
 app.use('/api/company',Companyrouter)
 app.use('/api/usermood',UserMoodRouter)
+app.use('/api/memberships', MembershipRouter);
+
 app.listen(port, () =>{
     connection();
     console.log(`Zoom Meeting SDK Auth Endpoint Sample Node.js listening on port ${port}!`)
