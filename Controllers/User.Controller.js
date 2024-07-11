@@ -217,7 +217,7 @@ export const updateUser = async (req, res) => {
 // Delete a user by ID
 export const deleteUser = async (req, res) => {
     try {
-      const user = await User.findOne({ _id: req.params.id });
+      const user = await User.find({ _id: req.params.id });
       
       if (!user) {
           return res.status(404).json({
