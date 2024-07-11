@@ -98,7 +98,7 @@ export const createUser = async (req, res) => {
 
         const membershipData = {
           userId: newUser._id,
-          planName: 'Default Plan', // You can set a default plan name
+          planName: 'Trail Plan', // You can set a default plan name
           validityDays: 1,
           status: 'active',
           startDate: new Date(),
@@ -227,15 +227,17 @@ export const deleteUser = async (req, res) => {
               message: 'User not found'
           });
       }
-      await Membership.deleteMany({ userId: user._id });
-      await EventApplication.deleteMany({ userId: user._id });
-      await CustomSession.deleteMany({ user: user._id });
-      await Mood.deleteMany({ userId: user._id });
-        await User.findByIdAndDelete(req.params.id);
-        res.status(204).json({
+      await Membership.deleteMany({ userId: req.params.id  });
+      await EventApplication.deleteMany({ userId: req.params.id  });
+      await CustomSession.deleteMany({ user: req.params.id  });
+      await Mood.deleteMany({ userId:req.params.id  });
+      await User.findByIdAndDelete(req.params.id);
+
+      res.status(204).json({
             status: 'success',
             data: null
-        });
+      });
+      
     } catch (error) {
         res.status(404).json({
             status: 'fail',
