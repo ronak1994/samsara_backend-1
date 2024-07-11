@@ -1,6 +1,7 @@
 import { User } from "../Models/User.Model.js";
 import jwt from 'jsonwebtoken';
 import { Mood } from "../Models/UserMood.Model.js";
+import Membership from "../Models/Membership.Model.js";
 
 export const loginUser = async (req, res) => {
     try {
@@ -92,6 +93,18 @@ export const createUser = async (req, res) => {
           mood: 'Happy' // You can set a default mood value
         };
         await Mood.create(defaultMood);
+
+        const membershipData = {
+          userId: newUser._id,
+          planName: 'Default Plan', // You can set a default plan name
+          validityDays: 1,
+          status: 'active',
+          startDate: new Date(),
+          endDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000) // 1 day from now
+      };
+      await Membership.create(membershipData);
+
+
         res.status(201).json({
             status: 'success',
             data: {
