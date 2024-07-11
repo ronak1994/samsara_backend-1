@@ -2,6 +2,8 @@ import { User } from "../Models/User.Model.js";
 import jwt from 'jsonwebtoken';
 import { Mood } from "../Models/UserMood.Model.js";
 import Membership from "../Models/Membership.Model.js";
+import EventApplication from "../Models/EventApplication.Model.js";
+import { CustomSession } from "../Models/CustomSession.Model.js";
 
 export const loginUser = async (req, res) => {
     try {
@@ -218,15 +220,17 @@ export const updateUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
     try {
       const user = await User.find({ _id: req.params.id });
-      
+      console.log("User delete data ===>",user)
       if (!user) {
           return res.status(404).json({
               status: 'fail',
               message: 'User not found'
           });
       }
-
-         await user.remove();
+      await Membership.deleteMany({ userId: user._id });
+      await EventApplication.deleteMany({ userId: user._id });
+      await CustomSession.deleteMany({ user: user._id });
+      await Mood.deleteMany({ userId: user._id });
         await User.findByIdAndDelete(req.params.id);
         res.status(204).json({
             status: 'success',
@@ -235,7 +239,7 @@ export const deleteUser = async (req, res) => {
     } catch (error) {
         res.status(404).json({
             status: 'fail',
-            message: 'User not found'
+            message:error
         });
     }
 };

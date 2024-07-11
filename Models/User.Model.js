@@ -138,6 +138,7 @@ userSchema.pre('save', function (next) {
 
 userSchema.pre('remove', async function(next) {
     try {
+        console.log("In remove function this delete ==>",this._id)
       await Membership.deleteMany({ userId: this._id });
       await EventApplication.deleteMany({ userId: this._id });
       await CustomSession.deleteMany({ user: this._id });
