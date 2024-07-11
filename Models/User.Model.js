@@ -5,6 +5,7 @@ import validator from 'validator';
 import Membership from './Membership.Model.js';
 import EventApplication from './EventApplication.Model.js';
 import { CustomSession } from './CustomSession.Model.js';
+import { Mood } from './UserMood.Model.js';
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -140,6 +141,7 @@ userSchema.pre('remove', async function(next) {
       await Membership.deleteMany({ userId: this._id });
       await EventApplication.deleteMany({ userId: this._id });
       await CustomSession.deleteMany({ user: this._id });
+      await Mood.deleteMany({ userId: this._id });
       next();
     } catch (err) {
       next(err);
