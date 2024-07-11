@@ -217,8 +217,8 @@ export const updateUser = async (req, res) => {
 // Delete a user by ID
 export const deleteUser = async (req, res) => {
     try {
-      const user = await User.findById(req.params.id);
-
+      const user = await User.findOne({ _id: userId });
+      
       if (!user) {
           return res.status(404).json({
               status: 'fail',
