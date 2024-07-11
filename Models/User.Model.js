@@ -2,6 +2,9 @@ import mongoose from 'mongoose';
 import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import validator from 'validator';
+import Membership from './Membership.Model.js';
+import EventApplication from './EventApplication.Model.js';
+import { CustomSession } from './CustomSession.Model.js';
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -131,6 +134,18 @@ userSchema.pre('save', function (next) {
     this.passwordChangedAt = Date.now() - 1000;
     next();
 });
+
+userSchema.pre('remove', async function(next) {
+    try {
+      await Membership.deleteMany({ userId: this._id });
+      await EventApplication.deleteMany({ userId: this._id });
+      await CustomSession.deleteMany({ user: this._id });
+      next();
+    } catch (err) {
+      next(err);
+    }
+  });
+
 /**
  * Reset Password
  */
